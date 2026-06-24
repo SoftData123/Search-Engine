@@ -1,109 +1,160 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Trie from "./trie/Trie";
-import words from "./Data/words";
+import words from "./data/words";
+
 import SearchBar from "./components/SearchBar";
 import Suggestions from "./components/Suggestions";
-import logo from "./assets/logo.jpeg";
+import SearchResults from "./components/SearchResults";
+
+import logo from "./assets/logo web.png";
 
 const trie = new Trie();
 
 function App() {
   const [suggestions, setSuggestions] = useState([]);
+  const [results, setResults] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [theme, setTheme] = useState("light");
-  const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    words.forEach(item => trie.insert(item.keyword.toLowerCase(), item.url));
+    words.forEach((item) => {
+      trie.insert(
+        item.keyword.toLowerCase(),
+        item.url
+      );
+    });
 
-    const hour = new Date().getHours();
-    const autoTheme = hour >= 19 || hour < 6 ? "dark" : "light";
-    setTheme(autoTheme);
-    document.body.classList.toggle("dark", autoTheme === "dark");
-
-    const savedHistory = JSON.parse(localStorage.getItem("history")) || [];
-    setHistory(savedHistory);
+    document.body.classList.remove("dark");
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    document.body.classList.toggle("dark", newTheme === "dark");
-  };
-
   const handleSearch = (query) => {
-    if (!query) {
+    if (!query.trim()) {
       setSuggestions([]);
+      setResults([]);
       setActiveIndex(-1);
       return;
     }
 
-    const lower = query.toLowerCase();
-    const exact = trie.exactSearch(lower);
+    const result = trie.search(
+      query.toLowerCase()
+    );
 
-    if (exact) {
-      saveHistory(query);
-      window.open(exact, "_blank");
-      setSuggestions([]);
-      return;
-    }
-
-    setSuggestions(trie.search(lower));
+    setSuggestions(result);
+    setResults(result);
     setActiveIndex(-1);
-  };
-
-  const saveHistory = (query) => {
-    const updated = [query, ...history.filter(h => h !== query)].slice(0, 5);
-    setHistory(updated);
-    localStorage.setItem("history", JSON.stringify(updated));
-  };
-
-  const removeHistoryItem = (item) => {
-    const updated = history.filter(h => h !== item);
-    setHistory(updated);
-    localStorage.setItem("history", JSON.stringify(updated));
   };
 
   const handleKeyDown = (e) => {
     if (!suggestions.length) return;
 
-    if (e.key === "ArrowDown") setActiveIndex(i => (i + 1) % suggestions.length);
-    if (e.key === "ArrowUp") setActiveIndex(i => (i - 1 + suggestions.length) % suggestions.length);
-    if (e.key === "Enter" && activeIndex >= 0) {
-      window.open(suggestions[activeIndex].url, "_blank");
-      saveHistory(suggestions[activeIndex].keyword);
-      setSuggestions([]);
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+
+      setActiveIndex(
+        (prev) =>
+          (prev + 1) % suggestions.length
+      );
     }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+
+      setActiveIndex(
+        (prev) =>
+          (prev - 1 + suggestions.length) %
+          suggestions.length
+      );
+    }
+
+    if (
+      e.key === "Enter" &&
+      activeIndex >= 0
+    ) {
+      window.open(
+        suggestions[activeIndex].url,
+        "_blank"
+      );
+    }
+  };
+
+  const toggleTheme = () => {
+    const nextTheme =
+      theme === "light"
+        ? "dark"
+        : "light";
+
+    setTheme(nextTheme);
+
+    document.body.classList.toggle(
+      "dark"
+    );
   };
 
   return (
     <div className="container">
-      {/* Theme toggle icon */}
-      <div className="theme-toggle-icon" onClick={toggleTheme}>
-        {theme === "dark" ? "☀️" : "🌙"}
+
+      {/* Animated Background */}
+      <div className="background-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
 
-      <img src={logo} alt="Company Logo" className="company-logo" />
+      {/* Theme Button */}
+      <button
+        className="theme-btn"
+        onClick={toggleTheme}
+      >
+        {theme === "light"
+          ? "🌙"
+          : "☀️"}
+      </button>
 
-      <div className="company-name">
-        Data-Software Analysis Pvt. Ltd.
+      <div className="content">
+
+        {/* Logo */}
+        <img
+          src={logo}
+          alt="Company Logo"
+          className="logo"
+        />
+
+        {/* Company Name */}
+        <h2 className="company-name">
+          Powered By Data-Software Analysis Pvt. Ltd.
+        </h2>
+
+        {/* Search Engine Title */}
+        <h1>
+          Smart Search Engine
+        </h1>
+
+        {/* Search Bar */}
+        <SearchBar
+          onSearch={handleSearch}
+          onKeyDown={handleKeyDown}
+        />
+
+        {/* Suggestions */}
+        <Suggestions
+          suggestions={suggestions}
+          activeIndex={activeIndex}
+          onSelect={(url) =>
+            window.open(
+              url,
+              "_blank"
+            )
+          }
+        />
+
+        {/* Search Results */}
+        <SearchResults
+          results={results}
+        />
+
       </div>
-
-      <h3 className="search-title">Search Engine (Browser)</h3>
-
-      <SearchBar onSearch={handleSearch} onKeyDown={handleKeyDown} />
-
-      <Suggestions
-        suggestions={suggestions}
-        activeIndex={activeIndex}
-        onSelect={(url, keyword) => {
-          saveHistory(keyword);
-          window.open(url, "_blank");
-          setSuggestions([]);
-        }}
-        history={history}
-        onRemoveHistory={removeHistoryItem}
-      />
     </div>
   );
 }

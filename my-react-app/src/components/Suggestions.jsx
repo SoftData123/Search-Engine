@@ -1,30 +1,23 @@
-const Suggestions = ({ suggestions, activeIndex, onSelect, history, onRemoveHistory }) => {
-  if (!suggestions.length && !history.length) return null;
+const Suggestions = ({
+  suggestions,
+  activeIndex,
+  onSelect
+}) => {
+  if (!suggestions.length) return null;
 
   return (
-    <ul>
-      {history.map((item, i) => (
-        <li key={`h-${i}`} className="history">
-          🕘 {item}
-          <span
-            className="remove-history"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              onRemoveHistory(item);
-            }}
-          >
-            ×
-          </span>
-        </li>
-      ))}
-
+    <ul className="suggestions">
       {suggestions.map((item, index) => (
         <li
           key={index}
-          className={index === activeIndex ? "active" : ""}
-          onMouseDown={() => onSelect(item.url, item.keyword)}
+          className={
+            activeIndex === index ? "active" : ""
+          }
+          onMouseDown={() =>
+            onSelect(item.url, item.keyword)
+          }
         >
-          {item.keyword}
+          🔍 {item.keyword}
         </li>
       ))}
     </ul>

@@ -1,273 +1,563 @@
-/* =====================================
-   Global Reset & Font Smoothing
-===================================== */
+/* ===========================
+   Global Styles
+=========================== */
+
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  
+}
+img {
+  max-width: 100%;
+  height: auto;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  color: #202124;
-  background: #f5f5f5;
-  overflow-x: hidden;
-}
-
-/* =====================================
-   Background & Overlay
-===================================== */
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-image: url("https://images.unsplash.com/photo-1498050108023-c5249f4df085");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  transition: background 0.5s ease;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.25);
-  pointer-events: none;
-  transition: background 0.5s ease;
-}
-
-/* =====================================
-   Container
-===================================== */
 .container {
   width: 100%;
-  max-width: 600px;
+  padding: 0 15px;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  transition: 0.4s;
+}
+
+/* ===========================
+   Animated Background
+=========================== */
+
+.container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e3a8a,
+    #2563eb,
+    #0ea5e9
+  );
+
+  background-size: 400% 400%;
+
+  animation: gradientAnimation 12s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ===========================
+   Floating Background Circles
+=========================== */
+
+.background-animation span {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  animation: floating 15s linear infinite;
+  backdrop-filter: blur(10px);
+}
+
+.background-animation span:nth-child(1) {
+  width: 250px;
+  height: 250px;
+  left: 5%;
+  top: 10%;
+}
+
+.background-animation span:nth-child(2) {
+  width: 180px;
+  height: 180px;
+  right: 10%;
+  top: 15%;
+}
+
+.background-animation span:nth-child(3) {
+  width: 300px;
+  height: 300px;
+  left: 20%;
+  bottom: 10%;
+}
+
+.background-animation span:nth-child(4) {
+  width: 220px;
+  height: 220px;
+  right: 20%;
+  bottom: 15%;
+}
+
+.background-animation span:nth-child(5) {
+  width: 120px;
+  height: 120px;
+  left: 50%;
+  top: 50%;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-50px) rotate(180deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(360deg);
+  }
+}
+
+/* ===========================
+   Main Content
+=========================== */
+
+.content {
+  position: relative;
+  z-index: 100;
   text-align: center;
-  background: transparent;
-  padding: 20px;
+  padding-top: 40px;
 }
 
-/* =====================================
-   Logo & Titles
-===================================== */
-.company-logo {
-  display: block;
-  margin: 0 auto 12px;
-  width: 90px;
-  border-radius: 12px;
-  transition: transform 0.3s ease;
+/* ===========================
+   Logo
+=========================== */
+
+.logo {
+  width: 250px;
+  height: 250px;
+  object-fit: contain;
+
+  filter:
+    drop-shadow(0 0 20px rgba(255,255,255,0.4))
+    drop-shadow(0 0 40px rgba(59,130,246,0.5));
+
+  animation: logoFloat 4s ease-in-out infinite;
 }
 
-.company-logo:hover {
-  transform: scale(1.05);
+@keyframes logoFloat {
+  0%,100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
 }
+
+/* ===========================
+   Company Name
+=========================== */
 
 .company-name {
-  font-size: 24px;
+  margin-top: 20px;
+  font-size: 38px;
   font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
+  color: white;
+
   text-shadow:
-    0 2px 10px rgba(0, 0, 0, 0.9),
-    0 0 12px rgba(66, 165, 245, 0.35); /* blue glow */
+    0 0 10px rgba(255,255,255,0.5),
+    0 0 30px #3b82f6,
+    0 0 60px #2563eb;
+
+  letter-spacing: 1px;
 }
 
-.search-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #cfd8dc;
-  margin-bottom: 28px;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+/* ===========================
+   Heading
+=========================== */
+
+h1 {
+  margin-top: 15px;
+  font-size: 52px;
+  color: white;
+
+  text-shadow:
+    0 0 15px rgba(255,255,255,0.5);
+
+  margin-bottom: 30px;
 }
 
-/* =====================================
-   Search Bar with Icons
-===================================== */
-.search-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 560px;
-  margin: 0 auto;
-}
+/* ===========================
+   Search Box
+=========================== */
 
-.search-icon,
-.voice-icon {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  transition: color 0.3s ease;
-}
+.search-box {
+  width: 90%;
+  max-width: 750px;
 
-.search-icon {
-  left: 18px;
-  color: #5f6368;
-}
+  margin: auto;
 
-.voice-icon {
-  right: 18px;
-  color: #5f6368;
-  cursor: pointer;
-}
-
-input {
-  width: 100%;
-  padding: 16px 52px;
-  font-size: 17px;
-  border-radius: 50px;
-  border: none;
-  outline: none;
-  background: #ffffff;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease;
-}
-
-input::placeholder {
-  color: #9aa0a6;
-}
-
-input:focus {
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
-}
-
-/* =====================================
-   Suggestions Dropdown
-===================================== */
-ul {
-  margin: 12px auto 0;
-  max-width: 560px;
-  list-style: none;
-  padding: 0;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-li {
-  padding: 14px 20px;
-  font-size: 16px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
-  transition: background 0.2s ease;
+
+  padding: 18px 30px;
+
+  border-radius: 60px;
+
+  background: rgba(255,255,255,0.12);
+
+  backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,0.2);
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.25);
+
+  transition: 0.4s;
 }
 
-li::before {
-  content: "🔍";
-  font-size: 14px;
+.search-box:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.3);
 }
 
-li:hover,
-li.active {
-  background: #f1f3f4;
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+
+  color: white;
+
+  font-size: 20px;
 }
 
-/* =====================================
+.search-box input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+.search-box button {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* ===========================
+   Suggestions
+=========================== */
+
+.suggestions {
+  width: 90%;
+  max-width: 750px;
+
+  margin: 15px auto;
+
+  list-style: none;
+
+  background: rgba(255,255,255,0.1);
+
+  backdrop-filter: blur(20px);
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.suggestions li {
+  padding: 18px 20px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.suggestions li:hover,
+.active {
+  background: rgba(255,255,255,0.15);
+}
+
+/* ===========================
+   Results
+=========================== */
+
+.results {
+  width: 90%;
+  max-width: 850px;
+
+  margin: 40px auto;
+}
+
+.card {
+  background: rgba(255,255,255,0.12);
+
+  backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,0.2);
+
+  border-radius: 20px;
+
+  padding: 25px;
+
+  margin-bottom: 20px;
+
+  text-align: left;
+
+  color: white;
+
+  transition: 0.4s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 15px 30px rgba(0,0,0,0.3);
+}
+
+.card h3 {
+  color: #60a5fa;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: #22c55e;
+}
+
+/* ===========================
+   Theme Button
+=========================== */
+
+.theme-btn {
+  position: fixed;
+
+  bottom: 30px;
+  right: 30px;
+
+  width: 60px;
+  height: 60px;
+
+  border: none;
+  border-radius: 50%;
+
+  font-size: 26px;
+
+  cursor: pointer;
+
+  background: rgba(255,255,255,0.15);
+
+  backdrop-filter: blur(20px);
+
+  color: white;
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.25);
+
+  z-index: 1000;
+}
+
+/* ===========================
    Dark Mode
-===================================== */
-body.dark {
-  background: #121212;
+=========================== */
+
+body.dark .container {
+  background: linear-gradient(
+    135deg,
+    #020617,
+    #0f172a,
+    #111827
+  );
 }
 
-body.dark::before {
-  background: rgba(0, 0, 0, 0.55);
-}
+/* ===========================
+   Responsive Design
+=========================== */
 
-body.dark input,
-body.dark ul {
-  background: #1f1f1f;
-  color: #ffffff;
-}
+/* Large Desktop (1400px and above) */
+@media (min-width: 1400px) {
+  .logo {
+    width: 250px;
+    height: 250px;
+  }
 
-body.dark li:hover,
-body.dark li.active {
-  background: #333;
-}
-
-body.dark .search-icon,
-body.dark .voice-icon {
-  color: #bbbbbb;
-}
-
-/* =====================================
-   Mobile Responsive
-===================================== */
-@media (max-width: 600px) {
   .company-name {
+    font-size: 42px;
+  }
+
+  h1 {
+    font-size: 60px;
+  }
+
+  .search-box {
+    padding: 25px 35px;
+  }
+
+  .search-box input {
     font-size: 20px;
   }
 
-  .search-title {
+  .theme-btn {
+    width: 65px;
+    height: 65px;
+    font-size: 28px;
+  }
+}
+
+/* Laptop (992px - 1399px) */
+@media (max-width: 1399px) {
+  .logo {
+    width: 220px;
+    height: 220px;
+  }
+
+  .company-name {
+    font-size: 34px;
+  }
+
+  h1 {
+    font-size: 48px;
+  }
+
+  .search-box {
+    padding: 20px 30px;
+  }
+
+  .search-box input {
+    font-size: 18px;
+  }
+}
+
+/* Tablet (768px - 991px) */
+@media (max-width: 991px) {
+  .logo {
+    width: 180px;
+    height: 180px;
+  }
+
+  .company-name {
+    font-size: 28px;
+  }
+
+  h1 {
+    font-size: 38px;
+  }
+
+  .search-box {
+    padding: 18px 25px;
+  }
+
+  .search-box input {
+    font-size: 16px;
+  }
+
+  .theme-btn {
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+  }
+}
+
+/* Mobile Devices (576px - 767px) */
+@media (max-width: 767px) {
+  .logo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .company-name {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .search-box {
+    padding: 15px 20px;
+    width: 100%;
+  }
+
+  .search-box input {
+    font-size: 15px;
+  }
+
+  .theme-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
+/* Small Mobile Devices (up to 575px) */
+@media (max-width: 575px) {
+  .logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .company-name {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .search-box {
+    width: 100%;
+    padding: 12px 15px;
+  }
+
+  .search-box input {
     font-size: 14px;
   }
 
-  input {
-    font-size: 15px;
-    padding: 14px 48px;
-  }
-
-  .search-wrapper,
-  ul {
-    max-width: 92%;
+  .theme-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
   }
 }
 
-/* =====================================
-   Smooth Transitions & Animations
-===================================== */
-*,
-*::before,
-*::after {
-  transition: all 0.3s ease;
-}
-.theme-toggle-icon {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  background: rgba(255, 255, 255, 0.85);
-  transition: all 0.3s ease;
-  font-size: 24px;
-}
+/* Extra Small Devices (320px and below) */
+@media (max-width: 320px) {
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
 
-.theme-toggle-icon:hover {
-  transform: scale(1.1);
-}
+  .company-name {
+    font-size: 18px;
+  }
 
-body.dark .theme-toggle-icon {
-  background: rgba(30, 30, 30, 0.85);
-  color: #ffffff;
-}
-.remove-history {
-  margin-left: auto;
-  padding-left: 8px;
-  color: #ff5252;
-  font-weight: bold;
-  cursor: pointer;
-  user-select: none;
-}
+  h1 {
+    font-size: 22px;
+  }
 
-li.history {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  .search-box {
+    padding: 10px 12px;
+  }
+
+  .search-box input {
+    font-size: 13px;
+  }
+
+  .theme-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
 }

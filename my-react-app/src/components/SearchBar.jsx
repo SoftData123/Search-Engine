@@ -1,56 +1,101 @@
-import { useState, useEffect } from "react";
-
-const languages = {
-  en: "Type to search...",
-  hi: "खोजने के लिए टाइप करें...",
-  mr: "शोधण्यासाठी टाइप करा..."
-};
+import { useState, useEffect, useRef } from "react";
 
 const SearchBar = ({ onSearch, onKeyDown }) => {
   const [query, setQuery] = useState("");
-  const [lang, setLang] = useState("en");
+  const [listening, setListening] = useState(false);
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => onSearch(query), 300);
+    const timer = setTimeout(() => {
+      onSearch(query);
+    }, 300);
+
     return () => clearTimeout(timer);
   }, [query, onSearch]);
 
-  const startVoice = () => {
-    if (!("webkitSpeechRecognition" in window)) return;
+  const voiceSearch = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
 
-    const rec = new window.webkitSpeechRecognition();
-    rec.lang = lang === "hi" ? "hi-IN" : lang === "mr" ? "mr-IN" : "en-US";
-    rec.start();
+    if (!SpeechRecognition) {
+      alert("Voice search is not supported in this browser.");
+      return;
+    }
 
-    rec.onresult = (e) => {
-      const text = e.results[0][0].transcript.toLowerCase();
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    setListening(true);
+
+    recognition.start();
+
+    recognition.onresult = (event) => {
+      const text =
+        event.results[0][0].transcript;
+
       setQuery(text);
+      onSearch(text);
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+    };
+
+    recognition.onerror = () => {
+      setListening(false);
     };
   };
 
-  return (
-    <>
-      <div className="search-wrapper">
-        <span className="search-icon">🔍</span>
-        <input
-          value={query}
-          placeholder={languages[lang]}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={onKeyDown}
-        />
-        <span className="voice-icon" onClick={startVoice}>🎤</span>
-      </div>
+  const clearSearch = () => {
+    setQuery("");
+    onSearch("");
+    inputRef.current.focus();
+  };
 
-      <select
-        className="lang-select"
-        value={lang}
-        onChange={(e) => setLang(e.target.value)}
+  return (
+    <div className="search-box">
+
+      {/* Search Icon */}
+      <span className="search-icon">
+        🔍
+      </span>
+
+      {/* Search Input */}
+      <input
+        ref={inputRef}
+        type="text"
+        placeholder="Search websites, keywords, topics..."
+        value={query}
+        onChange={(e) =>
+          setQuery(e.target.value)
+        }
+        onKeyDown={onKeyDown}
+      />
+
+      {/* Clear Button */}
+      {query && (
+        <button
+          className="clear-btn"
+          onClick={clearSearch}
+        >
+          ✖
+        </button>
+      )}
+
+      {/* Voice Search */}
+      <button
+        className={`voice-btn ${
+          listening ? "listening" : ""
+        }`}
+        onClick={voiceSearch}
       >
-        <option value="en">EN</option>
-        <option value="hi">HI</option>
-        <option value="mr">MR</option>
-      </select>
-    </>
+        🎤
+      </button>
+    </div>
   );
 };
 
