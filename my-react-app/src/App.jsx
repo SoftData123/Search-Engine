@@ -128,7 +128,7 @@ function App() {
 
         {/* Search Engine Title */}
         <h1>
-          Smart Search Engine
+          Smart Search Engines
         </h1>
 
         {/* Search Bar */}
