@@ -123,12 +123,12 @@ function App() {
 
         {/* Company Name */}
         <h2 className="company-name">
-          Powered By Data-Software Analysis Pvt. Ltd.
+          Powered By Data-Software Analysis 
         </h2>
 
         {/* Search Engine Title */}
         <h1>
-          Smart Search Engines
+          DSORA
         </h1>
 
         {/* Search Bar */}
